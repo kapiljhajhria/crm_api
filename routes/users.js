@@ -12,6 +12,7 @@ router.get("/me", auth, async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  console.log("POST user request, req is", req.body);
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -26,7 +27,10 @@ router.post("/", async (req, res) => {
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
   const token = user.generateAuthToken();
-  res.header("x-auth-token", token).send(_.pick(user, ["name", "email"]));
+  res
+    .header("x-auth-token", token)
+    .header("access-control-expose-headers", "x-auth-token")
+    .send(_.pick(user, ["name", "email"]));
 });
 
 module.exports = router;
