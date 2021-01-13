@@ -6,12 +6,14 @@ const validateObjectId = require("../middleware/validateObjectId");
 const router = express.Router();
 
 router.get("/", auth, async (req, res) => {
-  const customers = await Customer.find().sort("name");
+  const customers = await Customer.find({ addedBy: req.user._id }).sort("name");
   res.send(customers);
 });
 
 router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
+  console.log("got req to save customer, req body is", req.body);
+  console.log("error is ", error);
   if (error) return res.status(400).send(error.details[0].message);
   let customer = new Customer({
     name: req.body.name,
