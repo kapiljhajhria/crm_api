@@ -5,6 +5,7 @@ Resources:
   crmappproductionapp:
     Type: "AWS::Serverless::Function"
     Properties:
+      FunctionName: "crm-app-production-app"
       Handler: lambda.handler
       Runtime: nodejs14.x
       CodeUri: .
