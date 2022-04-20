@@ -1,8 +1,11 @@
 const winston = require("winston");
-// require("winston-mongodb");
+require("winston-mongodb");
 require("express-async-errors");
+const morgan = require("morgan");
+const config = require("config");
 
-module.exports = function () {
+module.exports = function (app) {
+  app.use(morgan("tiny"));
   winston.exceptions.handle(
     new winston.transports.File({ filename: "exceptionsHandler.log" })
   );
@@ -17,10 +20,10 @@ module.exports = function () {
 
   winston.add(new winston.transports.File({ filename: "logfile.log" }));
   winston.add(new winston.transports.Console());
-  // winston.add(
-  //   new winston.transports.MongoDB({
-  //     db: config.get("db"),
-  //     level: "error",
-  //   })
-  // );
+  winston.add(
+    new winston.transports.MongoDB({
+      db: config.get("db"),
+      level: "error",
+    })
+  );
 };

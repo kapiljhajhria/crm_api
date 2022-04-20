@@ -7,7 +7,7 @@ app.use(cors());
 app.get("/", async (req, res) => {
   return res.send("test api working");
 });
-require("./startup/logging")(); //logging errors
+require("./startup/logging")(app); //logging errors
 require("./startup/routes")(app); //load the routes
 require("./startup/db")(); //connect to database
 require("./startup/config")(); //check for config values or env values. if not found throw error
